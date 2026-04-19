@@ -34,6 +34,22 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
       },
       {
+        path: 'benchmark/dashboard',
+        loadChildren: () => import('./pages/benchmarks/dashboard/benchmark.routes.generated').then(m => m.benchmarkRoutes)
+      },
+      {
+        path: 'benchmark/bookkeeping',
+        loadChildren: () => import('./pages/benchmarks/bookkeeping/benchmark.routes.generated').then(m => m.benchmarkRoutes)
+      },
+      {
+        path: 'benchmark/currency-converter',
+        loadChildren: () => import('./pages/benchmarks/currency-converter/benchmark.routes.generated').then(m => m.benchmarkRoutes)
+      },
+      {
+        path: 'benchmark/settings',
+        loadChildren: () => import('./pages/benchmarks/settings/benchmark.routes.generated').then(m => m.benchmarkRoutes)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
