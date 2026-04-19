@@ -25,3 +25,22 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## GitHub Pages CI/CD
+
+This repository includes a GitHub Actions workflow at [.github/workflows/deploy-github-pages.yml](.github/workflows/deploy-github-pages.yml) for deploying the monolith app to GitHub Pages.
+
+Before the first deployment:
+
+1. Push this repository to GitHub.
+2. In the repository settings, open Pages.
+3. Set Source to GitHub Actions.
+
+After that, every push to `main` or `master` will build and deploy the app automatically.
+
+The workflow:
+
+- uses Node.js `20.19.0`
+- builds Angular in production mode
+- sets the correct `base-href` automatically for GitHub Pages
+- creates `404.html` from `index.html` so client-side routes work on refresh

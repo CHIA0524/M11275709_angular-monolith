@@ -1,4 +1,141 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  /* Light Theme Variables */
+  --bg-color: #fafafa;
+  --surface-color: #ffffff;
+  --text-primary: rgba(0, 0, 0, 0.87);
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --border-color: rgba(0, 0, 0, 0.12);
+  
+  /* Status Colors (Light) */
+  --color-blue-bg: #e3f2fd;
+  --color-blue-fg: #2196f3;
+  --color-green-bg: #e8f5e9;
+  --color-green-fg: #4caf50;
+  --color-orange-bg: #fbe9e7;
+  --color-orange-fg: #ff5722;
+  --color-purple-bg: #f3e5f5;
+  --color-purple-fg: #9c27b0;
+}
+
+html, body { height: 100%; transition: background-color 0.3s ease, color 0.3s ease; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: var(--bg-color); color: var(--text-primary); }
+
+/* Dark Theme Global Styles */
+body.dark-theme {
+  /* Dark Theme Variables - High Contrast & Vibrancy */
+  --bg-color: #0d1117; /* Deep Navy Black (GitHub Dark style) */
+  --surface-color: #161b22; /* Slightly lighter card background */
+  --text-primary: #f0f6fc; /* Bright white-blue text */
+  --text-secondary: #8b949e; /* Muted grey blue */
+  --border-color: #30363d; /* Visible borders */
+
+  /* Status Colors (Dark) - Much brighter and more saturated */
+  --color-blue-bg: rgba(56, 139, 253, 0.15);
+  --color-blue-fg: #58a6ff;
+  --color-green-bg: rgba(46, 160, 67, 0.15);
+  --color-green-fg: #3fb950;
+  --color-orange-bg: rgba(210, 153, 34, 0.15);
+  --color-orange-fg: #d29922;
+  --color-purple-bg: rgba(163, 113, 247, 0.15);
+  --color-purple-fg: #d2a8ff;
+
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+
+  /* Material Design overrides for dark theme simulation without full theming setup */
+  mat-sidenav-container, mat-sidenav {
+    background-color: #010409 !important; /* Almost pure black for sidebar */
+    color: var(--text-primary);
+    border-right: 1px solid var(--border-color);
+  }
+
+  mat-toolbar {
+    background-color: #161b22 !important; /* Matching surface color */
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: none; /* Flat design */
+  }
+
+  mat-card {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5); /* Deeper shadow */
+
+    .mat-card-subtitle {
+      color: var(--text-secondary);
+    }
+  }
+
+  /* Form controls in dark mode - High visibility */
+  .mat-mdc-form-field {
+    textarea, input, select {
+      color: var(--text-primary) !important;
+    }
+    .mat-mdc-input-element::placeholder {
+      color: var(--text-secondary);
+    }
+    .mat-mdc-form-field-label {
+      color: var(--text-secondary);
+    }
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--border-color) !important;
+    }
+    /* Focus state */
+    &.mat-focused {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: #58a6ff !important;
+        border-width: 2px;
+      }
+      .mat-mdc-form-field-label {
+        color: #58a6ff !important;
+      }
+    }
+  }
+
+  /* Buttons */
+  .mat-mdc-raised-button:not(:disabled) {
+    background-color: #21262d; 
+    color: #c9d1d9;
+    border: 1px solid var(--border-color);
+  }
+  
+  .mat-mdc-raised-button.mat-primary {
+    background-color: #238636 !important; /* GitHub Green button style */
+    color: white !important;
+    border: none;
+  }
+  
+  /* Icons */
+  .mat-icon {
+    color: var(--text-secondary);
+  }
+  
+  /* Make primary icons pop */
+  .mat-primary .mat-icon, 
+  .app-icon {
+    color: #58a6ff !important;
+  }
+
+  /* Tables */
+  .mat-mdc-table {
+    background-color: var(--surface-color);
+    .mat-mdc-header-cell {
+      color: var(--text-secondary);
+      border-bottom-color: var(--border-color);
+    }
+    .mat-mdc-cell {
+      color: var(--text-primary);
+      border-bottom-color: var(--border-color);
+    }
+    .mat-mdc-row:hover {
+      background-color: rgba(177, 186, 196, 0.12); /* Subtle hover */
+    }
+  }
+}
