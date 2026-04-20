@@ -3,6 +3,25 @@
   margin: 0 auto;
 }
 
+.dashboard-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+
+  .shortcut-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-color: var(--workspace-border-color, rgba(0, 0, 0, 0.12));
+    background-color: var(--workspace-surface-color, #fff);
+
+    mat-icon {
+      color: var(--workspace-accent-color, #4C9F70);
+    }
+  }
+}
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -197,6 +216,15 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard-shortcuts {
+    flex-direction: column;
+
+    .shortcut-chip {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+
   .stats-grid {
     grid-template-columns: 1fr;
   }

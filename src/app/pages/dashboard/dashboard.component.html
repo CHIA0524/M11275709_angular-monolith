@@ -5,6 +5,33 @@
     <p>載入資料中...</p>
   </div>
   } @else if (dashboardData) {
+  <div class="dashboard-shortcuts">
+    <a
+      mat-stroked-button
+      routerLink="/dashboard/insights"
+      class="shortcut-chip"
+    >
+      <mat-icon>insights</mat-icon>
+      <span>儀表板洞察</span>
+    </a>
+    <a
+      mat-stroked-button
+      routerLink="/dashboard/scenarios"
+      class="shortcut-chip"
+    >
+      <mat-icon>model_training</mat-icon>
+      <span>情境模擬</span>
+    </a>
+    <a
+      mat-stroked-button
+      routerLink="/dashboard/allocation"
+      class="shortcut-chip"
+    >
+      <mat-icon>donut_large</mat-icon>
+      <span>配置解讀</span>
+    </a>
+  </div>
+
   <!-- 統計卡片 -->
   <div class="stats-grid">
     @for (card of statCardStyles; track card.title) {
