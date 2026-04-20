@@ -15,10 +15,8 @@
 
   @if (loading$ | async) {
   <mat-card class="panel">載入配置資料中...</mat-card>
-  } @else if (error$ | async; as error) {
-  <mat-card class="panel">配置資料載入失敗：{{ error }}</mat-card>
-  } @else if (allocation$ | async; as allocation) { @if (allocation.length > 0)
-  {
+  } @else { @if (allocation$ | async; as allocation) { @if (allocation.length >
+  0) {
   <div class="allocation-grid">
     @for (item of allocation; track item.category) {
     <mat-card class="panel">
@@ -29,7 +27,13 @@
     </mat-card>
     }
   </div>
+  } @else { @if (error$ | async; as error) {
+  <mat-card class="panel">配置資料載入失敗：{{ error }}</mat-card>
   } @else {
   <mat-card class="panel">目前沒有可用的配置解讀資料。</mat-card>
-  } }
+  } } } @else { @if (error$ | async; as error) {
+  <mat-card class="panel">配置資料載入失敗：{{ error }}</mat-card>
+  } @else {
+  <mat-card class="panel">目前沒有可用的配置解讀資料。</mat-card>
+  } } }
 </section>
