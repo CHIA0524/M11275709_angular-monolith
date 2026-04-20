@@ -1,0 +1,42 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Category Trends</p>
+      <h1>類別分析報表</h1>
+      <p class="subtitle">
+        這一頁開始把報表從 dashboard 分流出來，路由與頁面深度都會更合理。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/reports">回報表中心</a>
+      <a mat-flat-button routerLink="/reports/exports">前往匯出</a>
+    </div>
+  </div>
+
+  @if (trends$ | async; as trends) {
+  <div class="trend-grid">
+    @for (trend of trends; track trend.category) {
+    <mat-card class="trend-card">
+      <h2>{{ trend.category }}</h2>
+      <div class="metric-row">
+        <span>本月</span
+        ><strong>{{
+          trend.currentMonth | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="metric-row">
+        <span>上月</span
+        ><strong>{{
+          trend.previousMonth | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="metric-row">
+        <span>變化率</span
+        ><strong>{{ trend.deltaRate / 100 | percent : "1.0-0" }}</strong>
+      </div>
+      <p>{{ trend.insight }}</p>
+    </mat-card>
+    }
+  </div>
+  }
+</section>

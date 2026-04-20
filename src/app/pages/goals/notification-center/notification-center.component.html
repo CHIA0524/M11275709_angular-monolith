@@ -1,0 +1,32 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Notification Center</p>
+      <h1>提醒紀錄與通知中心</h1>
+      <p class="subtitle">
+        通知中心會把提醒、目標、預算異常這些事件串成另一條功能線。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/goals">回目標列表</a>
+      <a mat-flat-button routerLink="/goals/reminders">回提醒設定</a>
+    </div>
+  </div>
+
+  @if (notifications$ | async; as notifications) {
+  <div class="notification-list">
+    @for (item of notifications; track item.id) {
+    <mat-card class="notification-card" [ngClass]="item.severity">
+      <div class="card-top">
+        <div>
+          <h2>{{ item.title }}</h2>
+          <p class="meta">{{ item.source }} · {{ item.createdAt }}</p>
+        </div>
+        <span class="badge">{{ item.severity }}</span>
+      </div>
+      <p>{{ item.message }}</p>
+    </mat-card>
+    }
+  </div>
+  }
+</section>

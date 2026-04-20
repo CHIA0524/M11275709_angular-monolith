@@ -1,0 +1,35 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Reporting Hub</p>
+      <h1>報表中心</h1>
+      <p class="subtitle">
+        把 dashboard 拆出真正的報表功能後，系統結構會更接近中大型產品。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/reports/categories">類別分析</a>
+      <a mat-flat-button routerLink="/reports/exports">匯出中心</a>
+    </div>
+  </div>
+
+  @if (modules$ | async; as modules) {
+  <div class="module-grid">
+    @for (module of modules; track module.id) {
+    <mat-card class="module-card">
+      <h2>{{ module.name }}</h2>
+      <p>{{ module.description }}</p>
+      <div class="meta-row">
+        <span>負責領域</span><strong>{{ module.owner }}</strong>
+      </div>
+      <div class="meta-row">
+        <span>產出頻率</span><strong>{{ module.cadence }}</strong>
+      </div>
+      <div class="meta-row">
+        <span>最近產出</span><strong>{{ module.lastGeneratedAt }}</strong>
+      </div>
+    </mat-card>
+    }
+  </div>
+  }
+</section>

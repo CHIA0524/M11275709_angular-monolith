@@ -30,6 +30,22 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/currency-converter/currency-converter.component').then(m => m.CurrencyConverterComponent)
       },
       {
+        path: 'budgets',
+        loadChildren: () => import('./pages/budgets/budget.routes').then(m => m.budgetRoutes)
+      },
+      {
+        path: 'accounts',
+        loadChildren: () => import('./pages/accounts/account.routes').then(m => m.accountRoutes)
+      },
+      {
+        path: 'reports',
+        loadChildren: () => import('./pages/reports/report.routes').then(m => m.reportRoutes)
+      },
+      {
+        path: 'goals',
+        loadChildren: () => import('./pages/goals/goal.routes').then(m => m.goalRoutes)
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
       },

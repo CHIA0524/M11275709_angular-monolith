@@ -55,6 +55,30 @@ export class ShellComponent implements OnInit {
       description: 'Currency Converter'
     },
     {
+      label: '預算管理',
+      icon: 'savings',
+      route: '/budgets',
+      description: 'Budgeting - 額度與偏差分析'
+    },
+    {
+      label: '帳戶管理',
+      icon: 'account_balance',
+      route: '/accounts',
+      description: 'Accounts - 帳戶與資金流向'
+    },
+    {
+      label: '報表中心',
+      icon: 'assessment',
+      route: '/reports',
+      description: 'Reports - 類別分析與匯出'
+    },
+    {
+      label: '提醒與目標',
+      icon: 'notifications_active',
+      route: '/goals',
+      description: 'Goals - 目標追蹤與通知'
+    },
+    {
       label: '個人設定',
       icon: 'settings',
       route: '/settings',

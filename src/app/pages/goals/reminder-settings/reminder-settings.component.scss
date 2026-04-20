@@ -1,0 +1,57 @@
+.page-shell {
+  display: grid;
+  gap: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: #64748b;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) 1fr;
+  gap: 20px;
+}
+
+.panel {
+  padding: 20px;
+}
+
+.reminder-form {
+  display: grid;
+  gap: 16px;
+}
+
+.rule-table {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .page-header,
+  .content-grid {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+}

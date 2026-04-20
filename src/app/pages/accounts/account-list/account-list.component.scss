@@ -1,0 +1,53 @@
+.page-shell {
+  display: grid;
+  gap: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: #64748b;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.panel {
+  padding: 20px;
+}
+
+.account-table {
+  width: 100%;
+}
+
+.positive {
+  color: #166534;
+  font-weight: 600;
+}
+
+.negative {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+  }
+}

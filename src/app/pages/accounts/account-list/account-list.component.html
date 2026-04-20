@@ -1,0 +1,71 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Account Workspace</p>
+      <h1>帳戶列表</h1>
+      <p class="subtitle">
+        先補齊資金所在實體，後面交易、報表、提醒都能接上來。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/accounts/insights">資金流向分析</a>
+    </div>
+  </div>
+
+  @if (accounts$ | async; as accounts) {
+  <mat-card class="panel">
+    <table mat-table [dataSource]="accounts" class="account-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>帳戶</th>
+        <td mat-cell *matCellDef="let account">{{ account.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="institution">
+        <th mat-header-cell *matHeaderCellDef>機構</th>
+        <td mat-cell *matCellDef="let account">{{ account.institution }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="currency">
+        <th mat-header-cell *matHeaderCellDef>幣別</th>
+        <td mat-cell *matCellDef="let account">{{ account.currency }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="balance">
+        <th mat-header-cell *matHeaderCellDef>餘額</th>
+        <td mat-cell *matCellDef="let account">
+          {{
+            account.balance | currency : account.currency : "symbol" : "1.0-0"
+          }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="monthlyChange">
+        <th mat-header-cell *matHeaderCellDef>月變化</th>
+        <td mat-cell *matCellDef="let account">
+          <span
+            [ngClass]="{
+              positive: account.monthlyChange >= 0,
+              negative: account.monthlyChange < 0
+            }"
+          >
+            {{
+              account.monthlyChange
+                | currency : account.currency : "symbol" : "1.0-0"
+            }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>操作</th>
+        <td mat-cell *matCellDef="let account">
+          <a mat-button [routerLink]="['/accounts', account.id]">查看明細</a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </mat-card>
+  }
+</section>

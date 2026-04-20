@@ -1,0 +1,81 @@
+@if (summary$ | async; as summary) {
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Budget Management</p>
+      <h1>預算總覽</h1>
+      <p class="subtitle">先建立預算輪廓，再往規劃與分析頁面深入。</p>
+    </div>
+
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/budgets/planning">前往預算設定</a>
+      <a mat-flat-button routerLink="/budgets/analysis">查看偏差分析</a>
+    </div>
+  </div>
+
+  <app-budget-summary-cards [summary]="summary"></app-budget-summary-cards>
+
+  @if (owners$ | async; as owners) {
+  <app-budget-filter-bar
+    [owners]="owners"
+    (filtersChange)="updateFilters($event)"
+  ></app-budget-filter-bar>
+  } @if (filteredPlans$ | async; as plans) {
+  <mat-card class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>預算配置清單</h2>
+        <p>這一頁先當成功能首頁，後續可以再長出審核流程與版本紀錄。</p>
+      </div>
+      <mat-icon>pie_chart</mat-icon>
+    </div>
+
+    <table mat-table [dataSource]="plans" class="budget-table">
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>類別</th>
+        <td mat-cell *matCellDef="let plan">{{ plan.category }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="owner">
+        <th mat-header-cell *matHeaderCellDef>負責人</th>
+        <td mat-cell *matCellDef="let plan">{{ plan.owner }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="monthlyLimit">
+        <th mat-header-cell *matHeaderCellDef>額度</th>
+        <td mat-cell *matCellDef="let plan">
+          {{ plan.monthlyLimit | currency : "TWD" : "symbol" : "1.0-0" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="spent">
+        <th mat-header-cell *matHeaderCellDef>已支出</th>
+        <td mat-cell *matCellDef="let plan">
+          {{ plan.spent | currency : "TWD" : "symbol" : "1.0-0" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>狀態</th>
+        <td mat-cell *matCellDef="let plan">
+          <span class="status-chip" [ngClass]="plan.status">{{
+            plan.status
+          }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>操作</th>
+        <td mat-cell *matCellDef="let plan">
+          <a mat-button [routerLink]="['/budgets', plan.id]">明細</a>
+          <a mat-button [routerLink]="['/budgets', plan.id, 'edit']">編輯</a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </mat-card>
+  }
+</section>
+}

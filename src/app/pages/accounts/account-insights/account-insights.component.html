@@ -1,0 +1,47 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Cash Flow Review</p>
+      <h1>帳戶資金流向分析</h1>
+      <p class="subtitle">
+        把帳戶資料拉出第二層頁面，後續就能再延伸成轉帳與流動性規劃。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/accounts">返回帳戶列表</a>
+    </div>
+  </div>
+
+  @if (insights$ | async; as insights) {
+  <div class="analysis-grid">
+    @for (item of insights; track item.accountId) {
+    <mat-card class="analysis-card">
+      <h2>{{ item.accountName }}</h2>
+      <div class="metric-row">
+        <span>流入</span
+        ><strong>{{
+          item.inflow | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="metric-row">
+        <span>流出</span
+        ><strong>{{
+          item.outflow | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="metric-row">
+        <span>淨流量</span
+        ><strong>{{
+          item.netFlow | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="metric-row">
+        <span>使用率</span
+        ><strong>{{ item.utilization / 100 | percent : "1.0-0" }}</strong>
+      </div>
+      <p class="recommendation">{{ item.recommendation }}</p>
+    </mat-card>
+    }
+  </div>
+  }
+</section>

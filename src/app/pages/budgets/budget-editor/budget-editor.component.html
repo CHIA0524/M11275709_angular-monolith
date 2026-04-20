@@ -1,0 +1,92 @@
+@if (plan$ | async; as plan) {
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Budget Editor</p>
+      <h1>編輯 {{ plan.category }}</h1>
+      <p class="subtitle">
+        這一頁先建立編輯流程骨架，之後可接保存、核准與歷程版本。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button [routerLink]="['/budgets', plan.id]">回明細</a>
+      <a mat-flat-button routerLink="/budgets/planning">回設定頁</a>
+    </div>
+  </div>
+
+  <div class="editor-grid">
+    <mat-card class="panel">
+      <form [formGroup]="editForm" class="budget-form">
+        <mat-form-field appearance="outline">
+          <mat-label>預算類別</mat-label>
+          <input matInput formControlName="category" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>負責人</mat-label>
+          <mat-select formControlName="owner">
+            <mat-option value="個人">個人</mat-option>
+            <mat-option value="家庭共用">家庭共用</mat-option>
+            <mat-option value="CHIA">CHIA</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>期間</mat-label>
+          <input matInput formControlName="period" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>月額度</mat-label>
+          <input matInput type="number" formControlName="monthlyLimit" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>已支出</mat-label>
+          <input matInput type="number" formControlName="spent" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>狀態</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="healthy">healthy</mat-option>
+            <mat-option value="warning">warning</mat-option>
+            <mat-option value="critical">critical</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button type="button">儲存變更</button>
+      </form>
+    </mat-card>
+
+    <mat-card class="panel side-panel">
+      <h2>編輯摘要</h2>
+      <div class="summary-row">
+        <span>目前額度</span>
+        <strong>{{
+          plan.monthlyLimit | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>已使用</span>
+        <strong>{{
+          plan.spent | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>剩餘</span>
+        <strong>{{
+          plan.monthlyLimit - plan.spent | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <p>下一步可以把這裡接成差異比對、版本說明與送審備註。</p>
+    </mat-card>
+  </div>
+</section>
+} @else {
+<section class="page-shell">
+  <mat-card class="panel empty-state"
+    >找不到指定預算，無法進入編輯頁。</mat-card
+  >
+</section>
+}

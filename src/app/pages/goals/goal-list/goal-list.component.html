@@ -1,0 +1,47 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Goal Tracking</p>
+      <h1>財務目標列表</h1>
+      <p class="subtitle">目標模組能自然補上進度追蹤、提醒與通知的後續路由。</p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/goals/reminders">提醒設定</a>
+      <a mat-flat-button routerLink="/goals/notifications">通知中心</a>
+    </div>
+  </div>
+
+  @if (goals$ | async; as goals) {
+  <div class="goal-grid">
+    @for (goal of goals; track goal.id) {
+    <mat-card class="goal-card">
+      <div class="card-top">
+        <h2>{{ goal.title }}</h2>
+        <span class="priority" [ngClass]="goal.priority">{{
+          goal.priority
+        }}</span>
+      </div>
+      <div class="metric-row">
+        <span>目前累積</span
+        ><strong>{{
+          goal.currentAmount | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="metric-row">
+        <span>目標金額</span
+        ><strong>{{
+          goal.targetAmount | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="metric-row">
+        <span>完成比例</span
+        ><strong>{{
+          goal.currentAmount / goal.targetAmount | percent : "1.0-0"
+        }}</strong>
+      </div>
+      <p>預計完成日 {{ goal.dueDate }}</p>
+    </mat-card>
+    }
+  </div>
+  }
+</section>
