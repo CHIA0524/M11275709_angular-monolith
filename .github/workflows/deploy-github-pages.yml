@@ -44,7 +44,14 @@ jobs:
         uses: actions/configure-pages@v6
 
       - name: Install dependencies
-        run: npm ci
+        shell: bash
+        run: |
+          npm ci --include=optional
+
+          # Work around npm optional dependency resolution bugs affecting Rollup on Linux.
+          if [ ! -d node_modules/@rollup/rollup-linux-x64-gnu ]; then
+            npm install --include=optional
+          fi
 
       - name: Build Angular app
         shell: bash
