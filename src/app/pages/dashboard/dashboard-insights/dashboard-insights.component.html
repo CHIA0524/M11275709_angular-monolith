@@ -17,7 +17,9 @@
 
   @if (loading$ | async) {
   <mat-card class="panel">載入分析資料中...</mat-card>
-  } @if (vm$ | async; as vm) {
+  } @else if (error$ | async; as error) {
+  <mat-card class="panel">洞察資料載入失敗：{{ error }}</mat-card>
+  } @else if (vm$ | async; as vm) {
   <div class="insight-grid">
     <mat-card class="panel"
       ><h2>平均月收入</h2>
@@ -57,5 +59,7 @@
       }
     </div>
   </mat-card>
+  } @else {
+  <mat-card class="panel">目前沒有可用的洞察資料。</mat-card>
   }
 </section>

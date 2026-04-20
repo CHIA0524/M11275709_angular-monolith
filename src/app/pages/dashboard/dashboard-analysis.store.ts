@@ -20,9 +20,17 @@ const dashboardDataSchema = z.object({
   assetTrends: z.array(z.object({
     date: z.string(),
     totalAssets: z.number(),
+    monthlyIncome: z.number().optional(),
+    monthlyExpense: z.number().optional(),
+    netWorth: z.number().optional(),
     cash: z.number(),
     investment: z.number(),
-    property: z.number()
+    property: z.number(),
+    expenseBreakdown: z.array(z.object({
+      category: z.string(),
+      amount: z.number(),
+      percentage: z.number()
+    })).optional()
   })),
   expenseBreakdown: z.array(z.object({
     category: z.string(),
@@ -94,14 +102,28 @@ export class DashboardAnalysisStore extends ComponentStore<DashboardAnalysisStat
   );
 
   private buildVm(dashboardData: DashboardData | null, monthlyTransactions: MonthlyTransaction[]): DashboardInsightVm | null {
-    if (!dashboardData || monthlyTransactions.length === 0) {
+    if (!dashboardData) {
       return null;
     }
 
-    const incomeTotal = monthlyTransactions.reduce((sum, item) => sum + item.income, 0);
-    const expenseTotal = monthlyTransactions.reduce((sum, item) => sum + item.expense, 0);
-    const monthlyAverageIncome = incomeTotal / monthlyTransactions.length;
-    const monthlyAverageExpense = expenseTotal / monthlyTransactions.length;
+    const transactionSeries = monthlyTransactions.length > 0
+      ? monthlyTransactions
+      : dashboardData.assetTrends
+          .filter(item => typeof item.monthlyIncome === 'number' && typeof item.monthlyExpense === 'number')
+          .map(item => ({
+            month: item.date,
+            income: item.monthlyIncome ?? 0,
+            expense: item.monthlyExpense ?? 0
+          }));
+
+    if (transactionSeries.length === 0) {
+      return null;
+    }
+
+    const incomeTotal = transactionSeries.reduce((sum, item) => sum + item.income, 0);
+    const expenseTotal = transactionSeries.reduce((sum, item) => sum + item.expense, 0);
+    const monthlyAverageIncome = incomeTotal / transactionSeries.length;
+    const monthlyAverageExpense = expenseTotal / transactionSeries.length;
     const savingsRate = monthlyAverageIncome === 0 ? 0 : (monthlyAverageIncome - monthlyAverageExpense) / monthlyAverageIncome;
     const [topExpense] = [...dashboardData.expenseBreakdown].sort((left, right) => right.amount - left.amount);
 

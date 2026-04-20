@@ -17,6 +17,7 @@ export class DashboardInsightsComponent {
   readonly store = inject(DashboardAnalysisStore);
   readonly vm$ = this.store.vm$;
   readonly loading$ = this.store.loading$;
+  readonly error$ = this.store.error$;
 
   constructor() {
     this.store.load();

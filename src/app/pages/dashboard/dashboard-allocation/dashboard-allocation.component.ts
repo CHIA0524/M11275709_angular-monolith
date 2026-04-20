@@ -17,6 +17,8 @@ import { DashboardFacadeService } from '../dashboard-facade.service';
 export class DashboardAllocationComponent {
   readonly facade = inject(DashboardFacadeService);
   readonly allocation$ = this.facade.allocation$;
+  readonly loading$ = this.facade.loading$;
+  readonly error$ = this.facade.error$;
 
   constructor() {
     this.facade.load();

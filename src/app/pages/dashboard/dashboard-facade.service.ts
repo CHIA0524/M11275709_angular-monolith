@@ -14,6 +14,8 @@ export class DashboardFacadeService {
   private readonly analysisStore = inject(DashboardAnalysisStore);
 
   readonly vm$ = this.analysisStore.vm$;
+  readonly loading$ = this.analysisStore.loading$;
+  readonly error$ = this.analysisStore.error$;
   readonly allocation$ = this.vm$.pipe(
     map(vm => {
       if (!vm) {

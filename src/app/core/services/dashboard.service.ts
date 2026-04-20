@@ -12,9 +12,13 @@ export interface MonthlyTransaction {
 export interface AssetTrend {
   date: string;
   totalAssets: number;
+  monthlyIncome?: number;
+  monthlyExpense?: number;
+  netWorth?: number;
   cash: number;
   investment: number;
   property: number;
+  expenseBreakdown?: ExpenseCategory[];
 }
 
 export interface ExpenseCategory {
