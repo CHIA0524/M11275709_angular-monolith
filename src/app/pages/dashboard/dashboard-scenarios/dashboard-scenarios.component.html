@@ -1,0 +1,50 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Scenario Planning</p>
+      <h1>資產情境模擬</h1>
+      <p class="subtitle">
+        這一頁把 dashboard 往互動運算頁延伸，讓 TS 計算邏輯變重。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/dashboard">回總覽</a>
+      <a mat-flat-button routerLink="/dashboard/insights">看洞察</a>
+      <a mat-flat-button routerLink="/dashboard/allocation">看配置</a>
+    </div>
+  </div>
+
+  <div class="editor-grid">
+    <mat-card class="panel">
+      <mat-form-field appearance="outline"
+        ><mat-label>目前淨值</mat-label
+        ><input
+          matInput
+          type="number"
+          [ngModel]="currentNetWorth()"
+          (ngModelChange)="currentNetWorth.set(+$event)"
+      /></mat-form-field>
+      <mat-form-field appearance="outline"
+        ><mat-label>月投資額</mat-label
+        ><input
+          matInput
+          type="number"
+          [ngModel]="monthlyInvestment()"
+          (ngModelChange)="monthlyInvestment.set(+$event)"
+      /></mat-form-field>
+      <mat-form-field appearance="outline"
+        ><mat-label>月支出變動</mat-label
+        ><input
+          matInput
+          type="number"
+          [ngModel]="monthlyExpenseDelta()"
+          (ngModelChange)="monthlyExpenseDelta.set(+$event)"
+      /></mat-form-field>
+    </mat-card>
+
+    <mat-card class="panel">
+      <h2>12 個月模擬</h2>
+      <app-projection-table [rows]="projectionRows()"></app-projection-table>
+    </mat-card>
+  </div>
+</section>

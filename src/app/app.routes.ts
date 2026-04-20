@@ -7,19 +7,11 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+        loadChildren: () => import('./pages/dashboard/dashboard.routes').then(m => m.dashboardRoutes)
       },
       {
         path: 'bookkeeping',
-        loadComponent: () => import('./pages/transaction-list/transaction-list.component').then(m => m.TransactionListComponent)
-      },
-      {
-        path: 'bookkeeping/add',
-        loadComponent: () => import('./pages/quick-add/quick-add.component').then(m => m.QuickAddComponent)
-      },
-      {
-        path: 'bookkeeping/edit/:id',
-        loadComponent: () => import('./pages/quick-add/quick-add.component').then(m => m.QuickAddComponent)
+        loadChildren: () => import('./pages/bookkeeping/bookkeeping.routes').then(m => m.bookkeepingRoutes)
       },
       {
         path: 'transaction-list',
@@ -27,43 +19,11 @@ export const routes: Routes = [
       },
       {
         path: 'currency-converter',
-        loadComponent: () => import('./pages/currency-converter/currency-converter.component').then(m => m.CurrencyConverterComponent)
-      },
-      {
-        path: 'budgets',
-        loadChildren: () => import('./pages/budgets/budget.routes').then(m => m.budgetRoutes)
-      },
-      {
-        path: 'accounts',
-        loadChildren: () => import('./pages/accounts/account.routes').then(m => m.accountRoutes)
-      },
-      {
-        path: 'reports',
-        loadChildren: () => import('./pages/reports/report.routes').then(m => m.reportRoutes)
-      },
-      {
-        path: 'goals',
-        loadChildren: () => import('./pages/goals/goal.routes').then(m => m.goalRoutes)
+        loadChildren: () => import('./pages/currency-converter/currency-converter.routes').then(m => m.currencyConverterRoutes)
       },
       {
         path: 'settings',
-        loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
-      },
-      {
-        path: 'benchmark/dashboard',
-        loadChildren: () => import('./pages/benchmarks/dashboard/benchmark.routes.generated').then(m => m.benchmarkRoutes)
-      },
-      {
-        path: 'benchmark/bookkeeping',
-        loadChildren: () => import('./pages/benchmarks/bookkeeping/benchmark.routes.generated').then(m => m.benchmarkRoutes)
-      },
-      {
-        path: 'benchmark/currency-converter',
-        loadChildren: () => import('./pages/benchmarks/currency-converter/benchmark.routes.generated').then(m => m.benchmarkRoutes)
-      },
-      {
-        path: 'benchmark/settings',
-        loadChildren: () => import('./pages/benchmarks/settings/benchmark.routes.generated').then(m => m.benchmarkRoutes)
+        loadChildren: () => import('./pages/settings/settings.routes').then(m => m.settingsRoutes)
       },
       {
         path: '',

@@ -2,6 +2,8 @@
 import { Component, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
@@ -16,6 +18,8 @@ import { SettingsService } from '../../core/services/settings.service';
   imports: [
     CommonModule, 
     FormsModule, 
+    RouterModule,
+    MatButtonModule,
     MatCardModule, 
     MatSlideToggleModule, 
     MatSelectModule, 
@@ -32,6 +36,11 @@ import { SettingsService } from '../../core/services/settings.service';
         </mat-card-header>
         
         <mat-card-content>
+          <div style="display: flex; gap: 12px; margin-bottom: 1rem; flex-wrap: wrap;">
+            <a mat-stroked-button routerLink="/settings/notifications">通知規則</a>
+            <a mat-stroked-button routerLink="/settings/workspace">設定工作台</a>
+          </div>
+
           <!-- 介面主題設定 -->
           <div class="setting-item">
             <div class="setting-icon">

@@ -1,0 +1,28 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Allocation Review</p>
+      <h1>資產配置解讀</h1>
+      <p class="subtitle">
+        這一頁透過 facade 將洞察資料轉成配置觀點，讓 dashboard 更像一個子系統。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/dashboard/insights">回洞察</a>
+      <a mat-flat-button routerLink="/dashboard/scenarios">回模擬</a>
+    </div>
+  </div>
+
+  @if (allocation$ | async; as allocation) {
+  <div class="allocation-grid">
+    @for (item of allocation; track item.category) {
+    <mat-card class="panel">
+      <h2>{{ item.category }}</h2>
+      <p>{{ item.amount | currency : "TWD" : "symbol" : "1.0-0" }}</p>
+      <p>{{ item.ratio | percent : "1.0-0" }}</p>
+      <p>{{ item.recommendation }}</p>
+    </mat-card>
+    }
+  </div>
+  }
+</section>

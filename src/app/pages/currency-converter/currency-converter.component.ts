@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -26,7 +28,9 @@ interface RateData {
   standalone: true,
   imports: [
     CommonModule, 
+    RouterModule,
     FormsModule, 
+    MatButtonModule,
     MatCardModule, 
     MatFormFieldModule, 
     MatSelectModule, 
@@ -53,9 +57,6 @@ export class CurrencyConverterComponent implements OnInit {
     { code: 'AUD', name: '澳幣' },
     { code: 'GBP', name: '英鎊' }
   ];
-
-  // 簡單的暫存匯率表
-  private rates: any = {};
 
   constructor(private http: HttpClient) {}
 

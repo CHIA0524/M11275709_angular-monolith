@@ -1,0 +1,9 @@
+.page-shell { display: grid; gap: 24px; }
+.page-header, .forecast-row { display: flex; justify-content: space-between; gap: 12px; }
+.eyebrow { margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; font-size: 12px; }
+.subtitle { margin: 8px 0 0; color: #64748b; }
+.header-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.panel { padding: 20px; }
+.forecast-list { display: grid; gap: 12px; }
+@media (max-width: 768px) { .page-header, .forecast-row { flex-direction: column; } }

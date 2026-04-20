@@ -7,6 +7,18 @@
   --text-primary: rgba(0, 0, 0, 0.87);
   --text-secondary: rgba(0, 0, 0, 0.6);
   --border-color: rgba(0, 0, 0, 0.12);
+  --workspace-bg-color: #F4F7FB;
+  --workspace-surface-color: #FFFFFF;
+  --workspace-toolbar-color: #2F5D7C;
+  --workspace-sidebar-color: #17324D;
+  --workspace-accent-color: #4C9F70;
+  --workspace-text-color: #16202A;
+  --workspace-text-muted: rgba(22, 32, 42, 0.68);
+  --workspace-border-color: rgba(22, 32, 42, 0.12);
+  --workspace-accent-soft: rgba(76, 159, 112, 0.14);
+  --workspace-toolbar-contrast: #F8FAFC;
+  --workspace-sidebar-contrast: #F8FAFC;
+  --workspace-surface-contrast: #16202A;
   
   /* Status Colors (Light) */
   --color-blue-bg: #e3f2fd;
@@ -20,7 +32,13 @@
 }
 
 html, body { height: 100%; transition: background-color 0.3s ease, color 0.3s ease; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: var(--bg-color); color: var(--text-primary); }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: var(--workspace-bg-color, var(--bg-color)); color: var(--workspace-text-color, var(--text-primary)); }
+
+mat-card {
+  background-color: var(--workspace-surface-color, var(--surface-color));
+  color: var(--workspace-text-color, var(--text-primary));
+  border: 1px solid var(--workspace-border-color, var(--border-color));
+}
 
 /* Dark Theme Global Styles */
 body.dark-theme {
@@ -41,8 +59,8 @@ body.dark-theme {
   --color-purple-bg: rgba(163, 113, 247, 0.15);
   --color-purple-fg: #d2a8ff;
 
-  background-color: var(--bg-color);
-  color: var(--text-primary);
+  background-color: var(--workspace-bg-color, var(--bg-color));
+  color: var(--workspace-text-color, var(--text-primary));
 
   /* Material Design overrides for dark theme simulation without full theming setup */
   mat-sidenav-container, mat-sidenav {
@@ -59,13 +77,13 @@ body.dark-theme {
   }
 
   mat-card {
-    background-color: var(--surface-color);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
+    background-color: var(--workspace-surface-color, var(--surface-color));
+    color: var(--workspace-text-color, var(--text-primary));
+    border: 1px solid var(--workspace-border-color, var(--border-color));
     box-shadow: 0 1px 3px rgba(0,0,0,0.5); /* Deeper shadow */
 
     .mat-card-subtitle {
-      color: var(--text-secondary);
+      color: var(--workspace-text-muted, var(--text-secondary));
     }
   }
 

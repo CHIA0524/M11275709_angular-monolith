@@ -4,8 +4,36 @@
     <mat-card-subtitle>查看、編輯或刪除您所有的記帳紀錄</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
+    <div class="table-actions">
+      <a mat-stroked-button routerLink="/bookkeeping/analytics">分析頁</a>
+      <a mat-stroked-button routerLink="/bookkeeping/recurring">重複交易</a>
+      <a mat-stroked-button routerLink="/bookkeeping/review">審核頁</a>
+      <a mat-stroked-button routerLink="/bookkeeping/reconciliation">對帳頁</a>
+    </div>
+    @if (tableStore.vm$ | async; as vm) {
+    <app-transaction-filter-panel
+      [currencies]="vm.currencies"
+      (filtersChange)="updateFilters($event)"
+    ></app-transaction-filter-panel>
+
+    <div class="summary-strip">
+      <div>收入 {{ vm.totals.income | number }}</div>
+      <div>支出 {{ vm.totals.expense | number }}</div>
+      <div>筆數 {{ vm.transactions.length }}</div>
+      <div>來源 {{ vm.meta.source }}</div>
+      <div>延遲 {{ vm.meta.latencyMs }} ms</div>
+    </div>
+
+    <div class="summary-strip group-strip">
+      @for (group of vm.groupPreview; track group.key) {
+      <div>
+        {{ group.label }} / {{ group.count }} 筆 / 淨額 {{ group.net | number }}
+      </div>
+      }
+    </div>
+
     <div class="table-container">
-      <table mat-table [dataSource]="transactions$" class="mat-elevation-z8">
+      <table mat-table [dataSource]="vm.transactions" class="mat-elevation-z8">
         <!-- Date Column -->
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>日期</th>
@@ -102,5 +130,6 @@
         <mat-icon>add</mat-icon>
       </button>
     </div>
+    }
   </mat-card-content>
 </mat-card>

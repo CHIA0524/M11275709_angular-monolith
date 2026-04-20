@@ -1,3 +1,20 @@
+.table-actions,
+.summary-strip {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.summary-strip {
+  color: #475569;
+  font-weight: 600;
+}
+
+.group-strip {
+  font-size: 13px;
+}
+
 .table-container {
   overflow: auto;
 }

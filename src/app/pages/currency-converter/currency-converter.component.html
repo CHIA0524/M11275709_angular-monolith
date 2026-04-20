@@ -5,6 +5,16 @@
       <mat-card-subtitle>快速換算不同貨幣</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
+      <div
+        style="display: flex; gap: 12px; margin-bottom: 1rem; flex-wrap: wrap"
+      >
+        <a mat-stroked-button routerLink="/currency-converter/history"
+          >匯率歷史</a
+        >
+        <a mat-stroked-button routerLink="/currency-converter/workspace"
+          >匯率工作台</a
+        >
+      </div>
       <!-- Base Currency -->
       <mat-form-field
         appearance="fill"

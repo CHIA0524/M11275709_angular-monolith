@@ -1,0 +1,61 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Dashboard Intelligence</p>
+      <h1>儀表板洞察頁</h1>
+      <p class="subtitle">
+        這一頁使用 component-store 整理多個資料來源，讓 dashboard
+        不只是一張總覽頁。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/dashboard">回總覽</a>
+      <a mat-flat-button routerLink="/dashboard/scenarios">情境模擬</a>
+      <a mat-flat-button routerLink="/dashboard/allocation">配置解讀</a>
+    </div>
+  </div>
+
+  @if (loading$ | async) {
+  <mat-card class="panel">載入分析資料中...</mat-card>
+  } @if (vm$ | async; as vm) {
+  <div class="insight-grid">
+    <mat-card class="panel"
+      ><h2>平均月收入</h2>
+      <strong>{{
+        vm.monthlyAverageIncome | currency : "TWD" : "symbol" : "1.0-0"
+      }}</strong></mat-card
+    >
+    <mat-card class="panel"
+      ><h2>平均月支出</h2>
+      <strong>{{
+        vm.monthlyAverageExpense | currency : "TWD" : "symbol" : "1.0-0"
+      }}</strong></mat-card
+    >
+    <mat-card class="panel"
+      ><h2>平均儲蓄率</h2>
+      <strong>{{ vm.savingsRate | percent : "1.0-0" }}</strong></mat-card
+    >
+    <mat-card class="panel"
+      ><h2>最高支出類別</h2>
+      <strong>{{ vm.topExpenseCategory }}</strong>
+      <p>
+        {{ vm.topExpenseAmount | currency : "TWD" : "symbol" : "1.0-0" }}
+      </p></mat-card
+    >
+  </div>
+
+  <mat-card class="panel forecast-panel">
+    <h2>未來六個月淨值推估</h2>
+    <div class="forecast-list">
+      @for (item of vm.forecastNetWorth; track item.month) {
+      <div class="forecast-row">
+        <span>{{ item.month }}</span
+        ><strong>{{
+          item.value | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      }
+    </div>
+  </mat-card>
+  }
+</section>

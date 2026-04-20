@@ -1,0 +1,68 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Monthly Review</p>
+      <h1>交易審核頁</h1>
+      <p class="subtitle">
+        把分析與規則候選拉到同一頁，形成 bookkeeping 的月結工作流。
+      </p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/bookkeeping">回列表</a>
+      <a mat-flat-button routerLink="/bookkeeping/analytics">回分析</a>
+      <a mat-flat-button routerLink="/bookkeeping/reconciliation">回對帳</a>
+    </div>
+  </div>
+
+  @if (reconciliation$ | async; as reconciliation) {
+  <mat-card class="panel">
+    <h2>假 API 狀態</h2>
+    <div class="metric-row">
+      <span>來源</span><strong>{{ reconciliation.meta.source }}</strong>
+    </div>
+    <div class="metric-row">
+      <span>模擬延遲</span
+      ><strong>{{ reconciliation.meta.latencyMs }} ms</strong>
+    </div>
+    <div class="metric-row">
+      <span>同步時間</span
+      ><strong>{{
+        reconciliation.meta.fetchedAt | date : "yyyy/MM/dd HH:mm:ss"
+      }}</strong>
+    </div>
+  </mat-card>
+  } @if (analytics$ | async; as analytics) {
+  <mat-card class="panel">
+    <h2>本月摘要</h2>
+    <div class="metric-row">
+      <span>收入</span
+      ><strong>{{
+        analytics.monthlyIncome | currency : "TWD" : "symbol" : "1.0-0"
+      }}</strong>
+    </div>
+    <div class="metric-row">
+      <span>支出</span
+      ><strong>{{
+        analytics.monthlyExpense | currency : "TWD" : "symbol" : "1.0-0"
+      }}</strong>
+    </div>
+    <div class="metric-row">
+      <span>重點類別</span><strong>{{ analytics.topExpenseCategory }}</strong>
+    </div>
+  </mat-card>
+  } @if (recurring$ | async; as recurring) {
+  <div class="review-grid">
+    @for (item of recurring; track item.category) {
+    <mat-card class="panel">
+      <h2>{{ item.category }}</h2>
+      <p>最近日期 {{ item.latestDate }}</p>
+      <p>次數 {{ item.occurrences }}</p>
+      <p>
+        平均金額
+        {{ item.averageAmount | currency : "TWD" : "symbol" : "1.0-0" }}
+      </p>
+    </mat-card>
+    }
+  </div>
+  }
+</section>
