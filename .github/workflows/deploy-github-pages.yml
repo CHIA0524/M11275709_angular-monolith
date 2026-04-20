@@ -50,7 +50,8 @@ jobs:
 
           # Work around npm optional dependency resolution bugs affecting Rollup on Linux.
           if [ ! -d node_modules/@rollup/rollup-linux-x64-gnu ]; then
-            npm install --include=optional
+            ROLLUP_VERSION=$(node -p "require('./node_modules/rollup/package.json').version")
+            npm install --no-save "@rollup/rollup-linux-x64-gnu@${ROLLUP_VERSION}"
           fi
 
       - name: Build Angular app
