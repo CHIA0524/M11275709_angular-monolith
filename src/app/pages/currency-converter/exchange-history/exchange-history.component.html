@@ -8,8 +8,27 @@
       </p>
     </div>
     <div class="header-actions">
-      <a mat-stroked-button routerLink="/currency-converter">回換算頁</a>
-      <a mat-flat-button routerLink="/currency-converter/workspace">工作台</a>
+      <a
+        mat-stroked-button
+        routerLink="/currency-converter"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >匯率換算</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/currency-converter/history"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >匯率歷史</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/currency-converter/workspace"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >匯率工作台</a
+      >
     </div>
   </div>
 

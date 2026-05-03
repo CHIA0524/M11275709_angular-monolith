@@ -9,9 +9,34 @@
       </p>
     </div>
     <div class="header-actions">
-      <a mat-stroked-button routerLink="/dashboard">回總覽</a>
-      <a mat-flat-button routerLink="/dashboard/scenarios">情境模擬</a>
-      <a mat-flat-button routerLink="/dashboard/allocation">配置解讀</a>
+      <a
+        mat-stroked-button
+        routerLink="/dashboard"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >總覽</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/dashboard/insights"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >儀表板洞察</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/dashboard/scenarios"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >情境模擬</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/dashboard/allocation"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >配置解讀</a
+      >
     </div>
   </div>
 

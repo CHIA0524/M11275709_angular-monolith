@@ -6,8 +6,27 @@
       <p class="subtitle">這一頁把設定模組往表單規則與偏好預覽延伸。</p>
     </div>
     <div class="header-actions">
-      <a mat-stroked-button routerLink="/settings">回設定首頁</a>
-      <a mat-flat-button routerLink="/settings/workspace">工作台偏好</a>
+      <a
+        mat-stroked-button
+        routerLink="/settings"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >設定首頁</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/settings/notifications"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >通知規則</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/settings/workspace"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >工作台偏好</a
+      >
     </div>
   </div>
 

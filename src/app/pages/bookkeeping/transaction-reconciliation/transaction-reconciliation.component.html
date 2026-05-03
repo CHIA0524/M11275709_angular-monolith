@@ -8,15 +8,41 @@
       </p>
     </div>
     <div class="header-actions">
-      <a mat-stroked-button routerLink="/bookkeeping">回列表</a>
-      <a mat-flat-button routerLink="/bookkeeping/analytics">回分析頁</a>
-      <a mat-flat-button routerLink="/bookkeeping/review">回審核頁</a>
-      <button mat-stroked-button type="button" (click)="fileImport.click()">
-        匯入工作簿
-      </button>
-      <button mat-flat-button type="button" (click)="exportWorkbook()">
-        匯出對帳簿
-      </button>
+      <a
+        mat-stroked-button
+        routerLink="/bookkeeping"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >交易列表</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/bookkeeping/analytics"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >記帳分析</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/bookkeeping/recurring"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >重複交易</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/bookkeeping/review"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >交易審核</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/bookkeeping/reconciliation"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >交易對帳</a
+      >
     </div>
   </div>
 
@@ -31,6 +57,14 @@
   @if (vm$ | async; as vm) {
   <mat-card class="panel">
     <h2>Excel 解析</h2>
+    <div class="header-actions">
+      <button mat-stroked-button type="button" (click)="fileImport.click()">
+        匯入工作簿
+      </button>
+      <button mat-flat-button type="button" (click)="exportWorkbook()">
+        匯出對帳簿
+      </button>
+    </div>
     <p>{{ importMessage() }}</p>
     @if (importSummary(); as imported) {
     <div class="metric-row">

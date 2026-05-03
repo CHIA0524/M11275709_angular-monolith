@@ -8,10 +8,41 @@
       </p>
     </div>
     <div class="header-actions">
-      <a mat-stroked-button routerLink="/bookkeeping">回列表</a>
-      <a mat-flat-button routerLink="/bookkeeping/recurring">重複交易候選</a>
-      <a mat-flat-button routerLink="/bookkeeping/review">交易審核</a>
-      <a mat-flat-button routerLink="/bookkeeping/reconciliation">對帳輸出</a>
+      <a
+        mat-stroked-button
+        routerLink="/bookkeeping"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >交易列表</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/bookkeeping/analytics"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >記帳分析</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/bookkeeping/recurring"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >重複交易</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/bookkeeping/review"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >交易審核</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/bookkeeping/reconciliation"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >交易對帳</a
+      >
     </div>
   </div>
 
