@@ -11,10 +11,38 @@
       <a mat-stroked-button routerLink="/bookkeeping">回列表</a>
       <a mat-flat-button routerLink="/bookkeeping/analytics">回分析頁</a>
       <a mat-flat-button routerLink="/bookkeeping/review">回審核頁</a>
+      <button mat-stroked-button type="button" (click)="fileImport.click()">
+        匯入工作簿
+      </button>
+      <button mat-flat-button type="button" (click)="exportWorkbook()">
+        匯出對帳簿
+      </button>
     </div>
   </div>
 
+  <input
+    #fileImport
+    class="visually-hidden"
+    type="file"
+    accept=".xlsx,.xls"
+    (change)="importWorkbook($event)"
+  />
+
   @if (vm$ | async; as vm) {
+  <mat-card class="panel">
+    <h2>Excel 解析</h2>
+    <p>{{ importMessage() }}</p>
+    @if (importSummary(); as imported) {
+    <div class="metric-row">
+      <span>工作表</span><strong>{{ imported.sheetNames.join(" / ") }}</strong>
+    </div>
+    <div class="metric-row">
+      <span>列數</span><strong>{{ imported.rowCount }}</strong>
+    </div>
+    <pre>{{ imported.previewRows | json }}</pre>
+    }
+  </mat-card>
+
   <div class="card-grid">
     <mat-card class="panel">
       <h2>API 狀態</h2>
@@ -69,30 +97,26 @@
   <div class="content-grid">
     <mat-card class="panel">
       <h2>分組結果</h2>
-      <div class="list-shell">
-        @for (group of vm.groups; track group.key) {
-        <div class="metric-row group-row">
-          <span>{{ group.label }} / {{ group.count }} 筆</span>
-          <strong>{{
-            group.net | currency : "TWD" : "symbol" : "1.0-0"
-          }}</strong>
-        </div>
-        }
-      </div>
+      <ag-grid-angular
+        class="ag-theme-quartz finance-grid"
+        [rowData]="vm.groups"
+        [columnDefs]="groupColumnDefs"
+        [defaultColDef]="defaultColDef"
+        [animateRows]="true"
+        [pagination]="true"
+        [paginationPageSize]="8"
+      ></ag-grid-angular>
     </mat-card>
 
     <mat-card class="panel">
       <h2>異常候選</h2>
-      <div class="list-shell">
-        @for (item of vm.anomalies; track item.id) {
-        <div class="metric-row group-row">
-          <span>{{ item.category }} / {{ item.date }}</span>
-          <strong>{{
-            item.amount | currency : item.currency : "symbol" : "1.0-0"
-          }}</strong>
-        </div>
-        }
-      </div>
+      <ag-grid-angular
+        class="ag-theme-quartz finance-grid"
+        [rowData]="vm.anomalies"
+        [columnDefs]="anomalyColumnDefs"
+        [defaultColDef]="defaultColDef"
+        [animateRows]="true"
+      ></ag-grid-angular>
     </mat-card>
   </div>
 

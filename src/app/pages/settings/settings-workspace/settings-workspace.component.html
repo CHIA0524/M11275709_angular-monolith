@@ -157,5 +157,35 @@
         </div>
       </div>
     </mat-card>
+
+    <mat-card class="panel panel-wide editor-panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Monaco 進階設定編輯器</h2>
+          <p>
+            直接編輯整份 user settings
+            JSON，讓設定頁承載更重的編輯器與驗證流程。
+          </p>
+        </div>
+      </div>
+      <div class="button-row">
+        <button mat-stroked-button type="button" (click)="syncEditorFromForm()">
+          載入整份設定
+        </button>
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="validateEditorConfig()"
+        >
+          驗證 JSON
+        </button>
+        <button mat-flat-button type="button" (click)="applyEditorConfig()">
+          套用編輯器內容
+        </button>
+      </div>
+      <p>{{ editorMessage() }}</p>
+      <p>{{ editorValidationMessage() }}</p>
+      <div #monacoHost class="monaco-host"></div>
+    </mat-card>
   </div>
 </section>

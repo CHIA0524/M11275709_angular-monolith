@@ -40,11 +40,69 @@
           [ngModel]="monthlyExpenseDelta()"
           (ngModelChange)="monthlyExpenseDelta.set(+$event)"
       /></mat-form-field>
+
+      <div class="formula-help">
+        <strong>可用變數</strong>
+        <p>base、investment、expenseDelta、month</p>
+      </div>
+
+      <mat-form-field appearance="outline"
+        ><mat-label>保守情境公式</mat-label
+        ><textarea
+          matInput
+          rows="3"
+          [ngModel]="conservativeFormula()"
+          (ngModelChange)="conservativeFormula.set($any($event))"
+        ></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"
+        ><mat-label>樂觀情境公式</mat-label
+        ><textarea
+          matInput
+          rows="3"
+          [ngModel]="optimisticFormula()"
+          (ngModelChange)="optimisticFormula.set($any($event))"
+        ></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"
+        ><mat-label>壓力情境公式</mat-label
+        ><textarea
+          matInput
+          rows="3"
+          [ngModel]="stressFormula()"
+          (ngModelChange)="stressFormula.set($any($event))"
+        ></textarea>
+      </mat-form-field>
+
+      <button mat-stroked-button type="button" (click)="resetFormulas()">
+        重設公式
+      </button>
     </mat-card>
 
     <mat-card class="panel">
       <h2>12 個月模擬</h2>
+      @if (projectionResult().error; as error) {
+      <p class="formula-error">{{ error }}</p>
+      } @else {
       <app-projection-table [rows]="projectionRows()"></app-projection-table>
+      } @if (formulaSummary(); as summary) {
+      <div class="formula-summary">
+        <div class="projection-row">
+          <span>12 個月保守值</span
+          ><strong>{{ summary.conservative | number : "1.0-0" }}</strong>
+        </div>
+        <div class="projection-row">
+          <span>12 個月樂觀值</span
+          ><strong>{{ summary.optimistic | number : "1.0-0" }}</strong>
+        </div>
+        <div class="projection-row">
+          <span>12 個月壓力值</span
+          ><strong>{{ summary.stress | number : "1.0-0" }}</strong>
+        </div>
+      </div>
+      }
     </mat-card>
   </div>
 </section>

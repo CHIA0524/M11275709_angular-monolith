@@ -26,6 +26,13 @@ const workspaceSchema = z.object({
   })
 });
 
+const userSettingsSchema = z.object({
+  theme: z.enum(['light', 'dark']),
+  defaultCurrency: z.enum(['TWD', 'USD', 'EUR', 'JPY', 'KRW', 'CNY', 'HKD', 'AUD', 'GBP']),
+  notificationsEnabled: z.boolean(),
+  workspacePreferences: workspaceSchema
+});
+
 @Injectable({ providedIn: 'root' })
 export class SettingsSearchService {
   private readonly catalog: SettingCatalogItem[] = [
@@ -47,5 +54,9 @@ export class SettingsSearchService {
 
   validateWorkspaceConfig(payload: unknown) {
     return workspaceSchema.parse(payload);
+  }
+
+  validateUserSettings(payload: unknown) {
+    return userSettingsSchema.parse(payload);
   }
 }

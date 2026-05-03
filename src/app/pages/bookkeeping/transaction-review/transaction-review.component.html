@@ -11,27 +11,38 @@
       <a mat-stroked-button routerLink="/bookkeeping">回列表</a>
       <a mat-flat-button routerLink="/bookkeeping/analytics">回分析</a>
       <a mat-flat-button routerLink="/bookkeeping/reconciliation">回對帳</a>
+      <button mat-stroked-button type="button" (click)="fileImport.click()">
+        匯入 Excel
+      </button>
+      <button mat-flat-button type="button" (click)="exportReviewWorkbook()">
+        匯出工作簿
+      </button>
     </div>
   </div>
 
-  @if (reconciliation$ | async; as reconciliation) {
+  <input
+    #fileImport
+    class="visually-hidden"
+    type="file"
+    accept=".xlsx,.xls"
+    (change)="importWorkbook($event)"
+  />
+
   <mat-card class="panel">
-    <h2>假 API 狀態</h2>
+    <h2>Excel 工作簿</h2>
+    <p>{{ importMessage() }}</p>
+    @if (importSummary(); as imported) {
     <div class="metric-row">
-      <span>來源</span><strong>{{ reconciliation.meta.source }}</strong>
+      <span>工作表</span><strong>{{ imported.sheetNames.join(" / ") }}</strong>
     </div>
     <div class="metric-row">
-      <span>模擬延遲</span
-      ><strong>{{ reconciliation.meta.latencyMs }} ms</strong>
+      <span>預覽列數</span><strong>{{ imported.rowCount }}</strong>
     </div>
-    <div class="metric-row">
-      <span>同步時間</span
-      ><strong>{{
-        reconciliation.meta.fetchedAt | date : "yyyy/MM/dd HH:mm:ss"
-      }}</strong>
-    </div>
+    <pre>{{ imported.previewRows | json }}</pre>
+    }
   </mat-card>
-  } @if (analytics$ | async; as analytics) {
+
+  @if (analytics$ | async; as analytics) {
   <mat-card class="panel">
     <h2>本月摘要</h2>
     <div class="metric-row">

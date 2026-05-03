@@ -46,6 +46,8 @@
 .preview-card { background: var(--preview-surface); border-radius: 16px; padding: 16px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); }
 .preview-card.muted { color: color-mix(in srgb, var(--preview-text) 68%, white); }
 .preview-accent { height: 14px; border-radius: 999px; margin-top: 12px; background: var(--preview-accent); }
+.editor-panel { align-content: start; }
+.monaco-host { min-height: 420px; border-radius: 18px; overflow: hidden; border: 1px solid rgba(148, 163, 184, 0.24); }
 @media (max-width: 900px) {
 	.page-header, .search-row, .content-grid, .preview-body { flex-direction: column; grid-template-columns: 1fr; }
 }

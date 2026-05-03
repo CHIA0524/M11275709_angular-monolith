@@ -7,5 +7,7 @@
 .panel { padding: 20px; }
 .list-shell { display: grid; gap: 12px; }
 .group-row { padding-bottom: 8px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+.finance-grid { width: 100%; min-height: 320px; border-radius: 14px; overflow: hidden; }
 pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-size: 12px; }
 @media (max-width: 768px) { .page-header, .metric-row { flex-direction: column; } }

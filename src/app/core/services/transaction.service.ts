@@ -93,6 +93,10 @@ export class TransactionService {
     this.saveToLocalStorage(updatedTransactions);
   }
 
+  replaceTransactions(transactions: Transaction[]): void {
+    this.saveToLocalStorage(transactions);
+  }
+
   updateTransaction(updatedTransaction: Transaction): void {
     const currentTransactions = this.transactionsSubject.getValue();
     const index = currentTransactions.findIndex(t => t.id === updatedTransaction.id);
