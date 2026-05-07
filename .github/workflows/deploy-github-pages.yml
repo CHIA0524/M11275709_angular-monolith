@@ -40,32 +40,15 @@ jobs:
           node-version: 20.19.0
           cache: npm
 
-      - name: Restore node_modules cache
-        id: node-modules-cache
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-monolith-node-20.19.0-${{ hashFiles('package-lock.json') }}
-
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
       - name: Install dependencies
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
           npm ci --include=optional --no-audit --no-fund
 
           # Work around npm optional dependency resolution bugs affecting Rollup on Linux.
-          if [ ! -d node_modules/@rollup/rollup-linux-x64-gnu ]; then
-            ROLLUP_VERSION=$(node -p "require('./node_modules/rollup/package.json').version")
-            npm install --no-save "@rollup/rollup-linux-x64-gnu@${ROLLUP_VERSION}"
-          fi
-
-      - name: Ensure Rollup optional dependency
-        if: steps.node-modules-cache.outputs.cache-hit == 'true'
-        shell: bash
-        run: |
           if [ ! -d node_modules/@rollup/rollup-linux-x64-gnu ]; then
             ROLLUP_VERSION=$(node -p "require('./node_modules/rollup/package.json').version")
             npm install --no-save "@rollup/rollup-linux-x64-gnu@${ROLLUP_VERSION}"
