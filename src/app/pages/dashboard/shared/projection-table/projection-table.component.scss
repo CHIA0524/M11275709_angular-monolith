@@ -1,0 +1,3 @@
+.projection-list { display: grid; gap: 10px; }
+.projection-row { display: grid; grid-template-columns: 72px 1fr 1fr 1fr; gap: 12px; align-items: center; }
+@media (max-width: 768px) { .projection-row { grid-template-columns: 1fr; } }

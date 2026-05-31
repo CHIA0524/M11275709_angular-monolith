@@ -1,0 +1,14 @@
+<div class="projection-list">
+  @for (item of rows(); track item.month) {
+  <div class="projection-row">
+    <span>{{ item.month }}</span>
+    <strong>{{
+      item.conservative | currency : "TWD" : "symbol" : "1.0-0"
+    }}</strong>
+    <strong>{{
+      item.optimistic | currency : "TWD" : "symbol" : "1.0-0"
+    }}</strong>
+    <strong>{{ item.stress | currency : "TWD" : "symbol" : "1.0-0" }}</strong>
+  </div>
+  }
+</div>

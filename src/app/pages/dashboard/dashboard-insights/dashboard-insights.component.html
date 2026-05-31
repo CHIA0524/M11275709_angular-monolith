@@ -1,0 +1,92 @@
+<section class="page-shell">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">{{ "儀表板洞察" | t }}</p>
+      <h1>{{ "儀表板洞察頁" | t }}</h1>
+      <p class="subtitle">
+        {{
+          "這一頁使用 component-store 整理多個資料來源，讓 dashboard 不只是一張總覽頁。"
+            | t
+        }}
+      </p>
+    </div>
+    <div class="header-actions">
+      <a
+        mat-stroked-button
+        routerLink="/dashboard"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >{{ "總覽" | t }}</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/dashboard/insights"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >{{ "儀表板洞察" | t }}</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/dashboard/scenarios"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >{{ "情境模擬" | t }}</a
+      >
+      <a
+        mat-flat-button
+        routerLink="/dashboard/allocation"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >{{ "配置解讀" | t }}</a
+      >
+    </div>
+  </div>
+
+  @if (loading$ | async) {
+  <mat-card class="panel">{{ "載入分析資料中..." | t }}</mat-card>
+  } @else { @if (vm$ | async; as vm) {
+  <div class="insight-grid">
+    <mat-card class="panel"
+      ><h2>{{ "平均月收入" | t }}</h2>
+      <strong>{{
+        vm.monthlyAverageIncome | currency : "TWD" : "symbol" : "1.0-0"
+      }}</strong></mat-card
+    >
+    <mat-card class="panel"
+      ><h2>{{ "平均月支出" | t }}</h2>
+      <strong>{{
+        vm.monthlyAverageExpense | currency : "TWD" : "symbol" : "1.0-0"
+      }}</strong></mat-card
+    >
+    <mat-card class="panel"
+      ><h2>{{ "平均儲蓄率" | t }}</h2>
+      <strong>{{ vm.savingsRate | percent : "1.0-0" }}</strong></mat-card
+    >
+    <mat-card class="panel"
+      ><h2>{{ "最高支出類別" | t }}</h2>
+      <strong>{{ vm.topExpenseCategory }}</strong>
+      <p>
+        {{ vm.topExpenseAmount | currency : "TWD" : "symbol" : "1.0-0" }}
+      </p></mat-card
+    >
+  </div>
+
+  <mat-card class="panel forecast-panel">
+    <h2>{{ "未來六個月淨值推估" | t }}</h2>
+    <div class="forecast-list">
+      @for (item of vm.forecastNetWorth; track item.month) {
+      <div class="forecast-row">
+        <span>{{ item.month }}</span
+        ><strong>{{
+          item.value | currency : "TWD" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      }
+    </div>
+  </mat-card>
+  } @else { @if (error$ | async; as error) {
+  <mat-card class="panel">{{ "洞察資料載入失敗：" | t }}{{ error }}</mat-card>
+  } @else {
+  <mat-card class="panel">{{ "目前沒有可用的洞察資料。" | t }}</mat-card>
+  } } }
+</section>

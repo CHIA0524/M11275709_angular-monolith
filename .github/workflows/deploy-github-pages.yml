@@ -1,0 +1,246 @@
+name: Deploy Angular Monolith to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - src/**
+      - public/**
+      - angular.json
+      - package.json
+      - package-lock.json
+      - tsconfig.app.json
+      - tsconfig.json
+      - tsconfig.spec.json
+      - .github/workflows/deploy-github-pages.yml
+  workflow_dispatch:
+    inputs:
+      comparison_profile:
+        description: Compare cold or warm CI baseline
+        required: true
+        default: warm
+        type: choice
+        options:
+          - cold
+          - warm
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NG_PERSISTENT_BUILD_CACHE: 1
+      NODE_OPTIONS: --max-old-space-size=6144
+
+    steps:
+      - name: Resolve comparison profile
+        id: comparison-profile
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PROFILE="${{ github.event.inputs.comparison_profile }}"
+          else
+            PROFILE="warm"
+          fi
+
+          echo "profile=$PROFILE" >> "$GITHUB_OUTPUT"
+          echo "Using comparison profile: $PROFILE"
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js (warm cache)
+        if: steps.comparison-profile.outputs.profile == 'warm'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20.19.0
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Setup Node.js (cold baseline)
+        if: steps.comparison-profile.outputs.profile == 'cold'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20.19.0
+
+      - name: Restore node_modules cache
+        if: steps.comparison-profile.outputs.profile == 'warm'
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-monolith-node-20.19.0-${{ hashFiles('package-lock.json') }}
+
+      - name: Restore Angular cache
+        if: steps.comparison-profile.outputs.profile == 'warm'
+        uses: actions/cache@v5
+        with:
+          path: .angular/cache
+          key: ${{ runner.os }}-angular-monolith-${{ hashFiles('package-lock.json', 'angular.json', 'tsconfig*.json') }}
+          restore-keys: |
+            ${{ runner.os }}-angular-monolith-
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          echo "Install mode: ${{ steps.comparison-profile.outputs.profile }}"
+          npm ci --include=optional --no-audit --no-fund
+
+          # Work around npm optional dependency resolution bugs affecting Rollup on Linux.
+          if [ ! -d node_modules/@rollup/rollup-linux-x64-gnu ]; then
+            ROLLUP_VERSION=$(node -p "require('./node_modules/rollup/package.json').version")
+            npm install --no-save "@rollup/rollup-linux-x64-gnu@${ROLLUP_VERSION}"
+          fi
+
+      - name: Type check
+        shell: bash
+        run: |
+          echo "Running TypeScript type check..."
+          npx tsc --noEmit --project tsconfig.app.json
+          echo "Type check passed."
+
+      - name: Build Angular app
+        timeout-minutes: 20
+        shell: bash
+        run: |
+          BUILD_START=$(date +%s)
+          echo "Build started at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          OWNER_NAME="${GITHUB_REPOSITORY_OWNER}"
+
+          if [ "$REPO_NAME" = "$OWNER_NAME.github.io" ]; then
+            BASE_HREF="/"
+          else
+            BASE_HREF="/$REPO_NAME/"
+          fi
+
+          PAGES_ROOT="dist/github-pages"
+          BUILD_ROOT="dist/i18n-builds"
+
+          rm -rf "$PAGES_ROOT" "$BUILD_ROOT"
+          mkdir -p "$PAGES_ROOT/en-US" "$PAGES_ROOT/ja-JP"
+
+          # Step 1: TypeScript type check (inside build step for timing)
+          echo "[1/3] Running TypeScript type check..."
+          npx tsc --noEmit --project tsconfig.app.json
+          echo "      Type check passed."
+
+          # Step 2: Build all locales
+          build_locale() {
+            local locale="$1"
+            local configuration="$2"
+            local output_path="$3"
+            local locale_base_href="$BASE_HREF"
+
+            if [ "$locale" != "zh-TW" ]; then
+              locale_base_href="${BASE_HREF}${locale}/"
+            fi
+
+            npx ng build --configuration "production,${configuration}" --source-map --base-href "$locale_base_href" --output-path "$output_path"
+          }
+
+          echo "[2/3] Building all locales..."
+          build_locale "zh-TW" "i18n-zh-tw" "$BUILD_ROOT/zh-TW"
+          build_locale "en-US" "i18n-en-us" "$BUILD_ROOT/en-US"
+          build_locale "ja-JP" "i18n-ja-jp" "$BUILD_ROOT/ja-JP"
+
+          cp -R "$BUILD_ROOT/zh-TW/browser/." "$PAGES_ROOT/"
+          cp -R "$BUILD_ROOT/en-US/browser/." "$PAGES_ROOT/en-US/"
+          cp -R "$BUILD_ROOT/ja-JP/browser/." "$PAGES_ROOT/ja-JP/"
+
+          # Step 3: Compress all JS/CSS with Brotli and Gzip for CDN-ready artifacts
+          echo "[3/4] Compressing artifacts (Brotli + Gzip)..."
+          find "$PAGES_ROOT" \( -name "*.js" -o -name "*.css" \) -not -name "*.map" | while read -r f; do
+            brotli --best --keep "$f"
+            gzip --best --keep "$f"
+          done
+
+          # Step 4: Analyse bundle composition with source-map-explorer (zh-TW only)
+          echo "[4/4] Analysing bundle composition (source-map-explorer)..."
+          JS_FILES=$(find "$PAGES_ROOT" -maxdepth 1 -name "*.js" -not -name "*.map" -not -name "*.br" -not -name "*.gz" | sort)
+          FILE_COUNT=$(echo "$JS_FILES" | wc -l)
+          echo "      Found ${FILE_COUNT} JS bundles in zh-TW locale."
+          echo "$JS_FILES" | while read -r f; do
+            mapfile="${f}.map"
+            if [ -f "$mapfile" ]; then
+              label="${f#$PAGES_ROOT/}"
+              echo "      → analysing: $label"
+              npx --yes source-map-explorer "$f" --no-border-checks --json 2>/dev/null \
+                | node -e "
+                    process.stdin.resume();
+                    let d='';
+                    process.stdin.on('data',c=>d+=c);
+                    process.stdin.on('end',()=>{
+                      try{
+                        const r=JSON.parse(d).results;
+                        const files=r[0].files;
+                        const total=Object.values(files).reduce((a,b)=>a+(b.size||0),0);
+                        const mods=Object.keys(files).length;
+                        console.log('        modules: '+mods+'  total: '+total+' bytes');
+                      }catch(e){console.log('        (parse skipped)');}
+                    });
+                  " 2>/dev/null || echo "        (skipped)"
+            fi
+          done
+
+          echo "--- Bundle Size Report ---"
+          find "$PAGES_ROOT" -name "*.js" -not -name "*.map" -not -name "*.br" -not -name "*.gz" | sort | while read -r f; do
+            raw=$(wc -c < "$f")
+            br="${f}.br"
+            gz="${f}.gz"
+            br_size=$([ -f "$br" ] && wc -c < "$br" || echo "-")
+            gz_size=$([ -f "$gz" ] && wc -c < "$gz" || echo "-")
+            echo "  $(printf '%8d' $raw) raw  →  $(printf '%7s' $br_size) br  $(printf '%7s' $gz_size) gz  ${f#$PAGES_ROOT/}"
+          done
+          TOTAL=$(find "$PAGES_ROOT" -name "*.js" -not -name "*.map" -not -name "*.br" -not -name "*.gz" -exec wc -c {} + | tail -1 | awk '{print $1}')
+          TOTAL_BR=$(find "$PAGES_ROOT" -name "*.js.br" -exec wc -c {} + | tail -1 | awk '{print $1}')
+          TOTAL_GZ=$(find "$PAGES_ROOT" -name "*.js.gz" -exec wc -c {} + | tail -1 | awk '{print $1}')
+          echo "  Total JS — raw: ${TOTAL}B  |  brotli: ${TOTAL_BR}B  |  gzip: ${TOTAL_GZ}B"
+          echo "--------------------------"
+
+          BUILD_END=$(date +%s)
+          BUILD_DURATION=$((BUILD_END - BUILD_START))
+          echo "Build finished at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Total Build Angular app duration: ${BUILD_DURATION}s"
+
+      - name: Prepare Pages artifact
+        shell: bash
+        run: |
+          cp dist/github-pages/index.html dist/github-pages/404.html
+          cp dist/github-pages/en-US/index.html dist/github-pages/en-US/404.html
+          cp dist/github-pages/ja-JP/index.html dist/github-pages/ja-JP/404.html
+          touch dist/github-pages/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist/github-pages
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
