@@ -43,5 +43,6 @@ export class DashboardFacadeService {
 
   load(): void {
     this.analysisStore.load();
+    console.log('test')
   }
 }
