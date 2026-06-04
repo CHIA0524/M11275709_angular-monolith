@@ -153,6 +153,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.currentCurrency = this.settingsService.settings().defaultCurrency;
     this.loadDashboardData();
+    console.log('test');
   }
 
   updateCurrencyAndRefresh() {
