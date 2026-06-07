@@ -231,9 +231,6 @@ jobs:
           MAIN_B=0; POLY_B=0; CSS_B=0; EAGER_B=0; LAZY_B=0
 
           echo ""
-          echo "  M11275709 Angular Monolith"
-          echo "  =========================="
-          echo ""
           echo "  [main]"
           for f in "$DIST"/main*.js; do
             [ -f "$f" ] || continue
@@ -279,6 +276,7 @@ jobs:
 
           LOGIC_B=$((MAIN_B+EAGER_B))
           echo ""
+          echo "  M11275709 Angular Monolith"
           echo "=================================="
           printf "  main.js              : %8.1f kB\n" "$(awk "BEGIN{printf \"%.1f\",$MAIN_B/1024}")"
           printf "  polyfills            : %8.1f kB\n" "$(awk "BEGIN{printf \"%.1f\",$POLY_B/1024}")"
